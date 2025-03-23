@@ -1,7 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { useState, useRef, useMemo } from "react";
+import { useContext } from "react";
+import TasksContext from "../context/TasksContext";
 
 export default function AddTask() {
+    const { addTask } = useContext(TasksContext);
+
+
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
     const descrizione = useRef();
@@ -14,20 +19,31 @@ export default function AddTask() {
         return inputName && name.trim().length >= 3
     }, [name]);
 
-    function handleFormSubmit(e) {
+    async function handleFormSubmit(e) {
         e.preventDefault();
 
-        if (
-            !name.trim() || !nameValidator || !descrizione.current.value || !status.current.value
-        ) {
+        if (!name.trim() || !nameValidator || !descrizione.current.value || !status.current.value) {
             setMessage('Errore: Compilare tutti i campi correttamente.');
-        } else {
-            setMessage(''),
-            console.log(
-                name,
-                descrizione.current.value,
-                status.current.value
-            );
+            return;
+        }
+
+        const newTask = {
+            title: name.trim(),
+            description: descrizione.current.value,
+            status: status.current.value
+        }
+
+        try {
+            await addTask(newTask);
+
+            alert('Task creata con successo!');
+
+            setName('');
+            descrizione.current.value = '';
+            status.current.value = '';
+
+        } catch (error) {
+            alert(error.message);
         }
     }
 
