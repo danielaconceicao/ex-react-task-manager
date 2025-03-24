@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 const { VITE_API_URL } = import.meta.env;
 import TasksContext from "../context/TasksContext";
+import Modal from '../components/Modal';
 
 export default function TaskDetail() {
     const { id } = useParams();
@@ -9,6 +10,8 @@ export default function TaskDetail() {
     const [task, setTask] = useState([]);
     const navigate = useNavigate();
     const { removeTask } = useContext(TasksContext);
+    const [showModal, setShowModal] = useState(false);
+
 
     useEffect(() => {
         async function fetchTask() {
@@ -23,8 +26,8 @@ export default function TaskDetail() {
             } catch (err) { console.error(err.message) }
         }
 
-        fetchTask()
-    }, [taskId])
+        fetchTask();
+    }, [taskId]);
 
 
     const handleDelete = async () => {
@@ -33,6 +36,8 @@ export default function TaskDetail() {
             alert('Task eliminata con successo!');
             navigate('/');
         } catch (err) { console.error(err.message) }
+
+        setShowModal(false);
     }
 
 
@@ -43,8 +48,18 @@ export default function TaskDetail() {
             <p><strong>Descrizione:</strong> {task.description}</p>
             <p><strong>Stato:</strong> {task.status}</p>
             <p><strong>Data di creazione:</strong> {new Date(task.createdAt).toLocaleDateString()}</p>
-            <button onClick={handleDelete}>Elimina Task</button>
-            <button><Link to={'/'} style={{ textDecoration: 'none', color: 'black' }}>Tasks</Link></button>
+            <button onClick={() => setShowModal(true)}>Elimina Task</button>
+            {/* <button><Link to={'/'} style={{ textDecoration: 'none', color: 'black' }}>Tasks</Link></button> */}
+
+            <Modal
+                show={showModal}
+                title="Conferma eliminazione"
+                content={<p>Sei sicuro di voler eliminare questa task?</p>}
+                onConfirm={handleDelete}
+                onClose={() => setShowModal(false)}
+                confirmText="Elimina"
+            />
+
         </div>
     )
 }

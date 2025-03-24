@@ -1,0 +1,58 @@
+/* Estilos para o overlay do modal */
+.my-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    /* Z-index alto para garantir sobreposição */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilos para o conteúdo do modal */
+.my-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 2px solid blue;
+    max-width: 400px;
+    width: 90%;
+    /* Largura relativa para responsividade */
+    text-align: center;
+    position: relative;
+    z-index: 10001;
+    /* Z-index ainda maior que o overlay */
+}
+
+/* Estilos para as ações do modal (botões) */
+.my-modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.my-modal-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+/* Estilos específicos para os botões de ação */
+.my-modal-actions button:first-child {
+    background-color: #f0f0f0;
+    /* Cor de fundo para o botão "Cancelar" */
+}
+
+.my-modal-actions button:last-child {
+    background-color: #007bff;
+    /* Cor de fundo para o botão "Confirmar" */
+    color: white;
+}
