@@ -1,4 +1,6 @@
-import { memo } from 'react'
+import { memo } from 'react';
+import { Link } from 'react-router-dom';
+const { VITE_API_URL } = import.meta.env;
 
 function TaskRow({ task }) {
 
@@ -10,7 +12,11 @@ function TaskRow({ task }) {
 
     return (
         <tr>
-            <td>{task.title}</td>
+            <td>
+                <Link to={`tasks/${task.id}`} style={{color: 'black', textDecoration: 'none'}}>
+                    {task.title}
+                </Link>
+            </td>
             <td style={{ background: statusColor[task.status] }}>{task.status}</td>
             <td>{new Date(task.createdAt).toLocaleDateString()}</td>
         </tr>

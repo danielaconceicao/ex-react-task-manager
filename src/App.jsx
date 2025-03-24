@@ -3,6 +3,7 @@ import ListTasks from './pages/ListTask'
 import AddTask from './pages/AddTask'
 import './App.css'
 import TasksProvider from './context/TasksProvider';
+import TaskDetail from './pages/TaskDetail';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route path='/' element={<ListTasks />} />
             <Route path='addtask' element={<AddTask />} />
+            <Route path='/tasks/:id' element={<TaskDetail />} />
           </Routes>
         </BrowserRouter>
       </TasksProvider>
