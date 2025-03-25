@@ -15,8 +15,12 @@ const reducer = (state, action) => {
             return { ...state, tasks: state.tasks.filter((task) => task.id !== action.id) };
         }
 
+        case 'UPDATE_TASK': {
+            return { ...state, tasks: state.tasks.map((task) => task.id === action.payload.id ? { ...task, ...action.payload } : task) };
+        }
+
         default:
-            return state
+            return state;
     }
 }
 
@@ -45,23 +49,38 @@ const addTask = async (newTask, dispatch) => {
 }
 
 const removeTask = async (taskId, dispatch) => {
-    try{
+    try {
         const response = await fetch(`${VITE_API_URL}/${taskId}`, { method: 'DELETE' });
-        const {success, message} = await response.json();
+        const { success, message } = await response.json();
 
-        if(!success) throw new Error(message);
-        
-        dispatch({ type: 'REMOVE_TASK', id: taskId })
-    }catch(err){console.error(err.message)}
+        if (!success) throw new Error(message);
+
+        dispatch({ type: 'REMOVE_TASK', id: taskId });
+    } catch (err) { console.error(err.message) }
+}
+
+const updateTask = async (taskId, updatedTask, dispatch) => {
+    try {
+        const response = await fetch(`${VITE_API_URL}/${taskId}`, { 
+            method: 'PUT',
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify(updatedTask),
+        });
+        const { success, message, task } = await response.json();
+
+        if (!success) throw new Error(message);
+
+        dispatch({ type: 'UPDATE_TASK', payload: task});
+    } catch (err) { console.error(err.message) }
 }
 
 const fetchTasks = async (dispatch) => {
     try {
-        const response = await fetch(`${VITE_API_URL}`)
-        const data = await response.json()
-        dispatch({ type: 'GET_TASK', payload: data })
+        const response = await fetch(`${VITE_API_URL}`);
+        const data = await response.json();
+        dispatch({ type: 'GET_TASK', payload: data });
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
 }
 
@@ -72,7 +91,12 @@ function useTasks() {
         fetchTasks(dispatch)
     }, []);
 
-    return { ...state, addTask: (newTask) => addTask(newTask, dispatch), removeTask: (task) => removeTask(task, dispatch) }
+    return {
+        ...state,
+        addTask: (newTask) => addTask(newTask, dispatch),
+        removeTask: (task) => removeTask(task, dispatch),
+        updateTask: (taskId, updatedTask) => updateTask(taskId, updatedTask, dispatch),
+    }
 }
 
 export default useTasks;

@@ -3,12 +3,13 @@ import useTasks from '../hooks/useTasks';
 
 export default function TasksProvider({ children }) {
 
-    const { tasks, addTask, removeTask } = useTasks();
+    const { tasks, addTask, removeTask, updateTask } = useTasks();
 
     const values = {
         tasks,
         addTask,
-        removeTask
+        removeTask,
+        updateTask
     }
 
 
